@@ -5,7 +5,7 @@
 *.o
 
 # executable
-.exe
+*.exe
 
 ##### VisualStudioCode
 .vscode/*
