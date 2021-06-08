@@ -4,6 +4,9 @@
 # Object files
 *.o
 
+# executable
+.exe
+
 ##### VisualStudioCode
 .vscode/*
 !.vscode/settings.json
