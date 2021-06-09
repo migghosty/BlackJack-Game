@@ -12,6 +12,11 @@ Player.o: Card.hpp
 Game.o: Game.hpp Player.hpp Card.hpp
 
 
+# if you are using windows, use the clean below
 .PHONY: clean
+#clean:
+#	del $(target).exe $(OBJ)
+
+# if you are using linux, use the clean below
 clean:
-	del $(target).exe $(OBJ)
+	rm $(target) $(OBJ)
