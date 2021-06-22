@@ -18,6 +18,7 @@ public:
 
     // runs the game
     void run();
+	void testing();
 
     // destructor
     ~Game() = default;
@@ -28,6 +29,7 @@ private:
     unsigned n_players;
     std::vector<Player> players;
     Player dealer{"Dealer"};
+	bool debug;
     std::string intro = " The game is BlackJack.\n \
 The point of the game is to get as close to 21 as possible.\n \
 Jacks, Queens, and Kings all serve as 10 points, and the numbers \
@@ -45,9 +47,13 @@ HAVE FUN PLAYING!!\n";
     void give_dealer_card();
     void initialize_hand();
     bool play_game();
+	bool play_game_testing();
     void display_player(const Player& player) const;
     void display_players() const;
     void display_dealer() const;
+	char get_response(std::string question);
+	void give_dealer_his_cards();
+
 };
 
 #endif

@@ -27,6 +27,7 @@ void Player::give_card(Card& card)
             {
                 if (cur_card.number == 11)
                 {
+					std::cout << "trying to change 11 to 1" << std::endl;
                     cur_card.number = 1;
                     has_ace = false;
                     break;

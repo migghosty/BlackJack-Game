@@ -18,10 +18,13 @@ int shuffle_deck(int i)
 
 Game::Game()
 {
+	char response;
     std::cout << intro << std::endl;
     std::cout << "Enter amount of players: ";
     std::cin >> n_players;
     initialize_players();
+	response = get_response("Do you want to debug? [Y]/[N]");
+	debug = (response == 'Y') ? true : false;
 }
 
 /////////////////////////////
@@ -47,6 +50,11 @@ void Game::run()
 
         continue_playing = play_game();
     } while (continue_playing);
+}
+
+// for testing purposes, omit the randomization
+void Game::testing()
+{
 }
 
 //////////////////////////////
@@ -102,9 +110,7 @@ void Game::initialize_hand()
     for (size_t i=0; i < 2; ++i)
     {
         for (auto& player : players)
-        {
             give_player_card(player);
-        }
 
         give_dealer_card();
     }
@@ -140,6 +146,35 @@ void Game::give_dealer_card()
     dealer.give_card(cur_card);
 }
 
+char Game::get_response(std::string question)
+{
+    char response;
+
+    while (1)
+    {
+		std::cout << question << std::endl;
+        std::cin >> response;
+        response = std::toupper(response);
+        switch (response)
+        {
+            case 'Y':
+            case 'N':
+                return response;
+            
+            default:
+                std::cout << "invalid command" << std::endl;
+        }
+    }
+	return ' '; // should never happen
+}
+
+void Game::give_dealer_his_cards()
+{
+    // give the dealer his set of cards
+    while (dealer.current_sum() < dealer_min)
+        give_dealer_card();
+}
+
 bool Game::play_game()
 {
     char response;
@@ -157,9 +192,7 @@ bool Game::play_game()
             else
                 std::cout << player.name << " you have " << player.current_sum() << std::endl;
             // ask if this player wants to hit
-            std::cout << player.name << ", do you want to hit? [Y]/[N] " << std::endl;
-            std::cin >> response;
-            response = std::toupper(response);
+			response = get_response(player.name + ", do you want to hit? [Y]/[N] ");
 
             switch (response)
             {
@@ -179,40 +212,27 @@ bool Game::play_game()
                 case 'N':
                     // go to the next player, no need to do anything
                     break;
-                
-                default:
-                    std::cout << "invalid command" << std::endl;
             }
         }
     }
 
     // give the dealer his set of cards
-    while (dealer.current_sum() < dealer_min)
-        give_dealer_card();
+	give_dealer_his_cards();
 
     std::cout << "\nFinal results below\n----------------------------" << std::endl;
     display_players();
     display_dealer();
     std::cout << "----------------------------" << std::endl;
 
-    std::cout << "\nDo you want to play again? [Y]/[N]" << std::endl;
-    while (1)
-    {
-        std::cin >> response;
-        response = std::toupper(response);
-        switch (response)
-        {
-            case 'Y':
-                return true;
-            
-            case 'N':
-                return false;
-            
-            default:
-                std::cout << "invalid command" << std::endl;
-        }
-    }
+	response = get_response("\nDo you want to play again? [Y]/[N]");
+	return (response == 'Y') ? true : false;
 }
+
+bool Game::play_game_testing()
+{
+	return false;
+}
+
 
 // displays a given players hand
 void Game::display_player(const Player& player) const
