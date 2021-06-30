@@ -47,7 +47,6 @@ HAVE FUN PLAYING!!\n";
     void give_dealer_card();
     void initialize_hand();
     bool play_game();
-	bool play_game_testing();
     void display_player(const Player& player) const;
     void display_players() const;
     void display_dealer() const;

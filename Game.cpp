@@ -274,12 +274,6 @@ bool Game::play_game()
 	return (response == 'Y') ? true : false;
 }
 
-bool Game::play_game_testing()
-{
-	return false;
-}
-
-
 // displays a given players hand
 void Game::display_player(const Player& player) const
 {
