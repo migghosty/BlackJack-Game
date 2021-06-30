@@ -34,27 +34,48 @@ Game::Game()
 // Runs the game
 void Game::run()
 {
-    bool continue_playing;
+	if (debug) {
+		testing();
+	}
 
-    // plays the game and starts asking the players
-    // if they want to hit or not
-    do {
-        std::cout << "NEW GAME\n--------------------------" << std::endl;
-        // initializes the deck
-        initialize_deck();
-        // initialize players hand
-        initialize_hand();
+	else {
+		bool continue_playing;
 
-        // display their hands
-        display_players();
+		// plays the game and starts asking the players
+		// if they want to hit or not
+		do {
+			std::cout << "NEW GAME\n--------------------------" << std::endl;
+			// initializes the deck
+			initialize_deck();
+			// initialize players hand
+			initialize_hand();
 
-        continue_playing = play_game();
-    } while (continue_playing);
+			// display their hands
+			display_players();
+
+			continue_playing = play_game();
+		} while (continue_playing);
+	}
 }
 
 // for testing purposes, omit the randomization
 void Game::testing()
 {
+    bool continue_playing;
+
+	std::string debug_info = "You are in debug mode. You choose what cards the players get\n";
+    // plays the game and starts asking the players
+    // if they want to hit or not
+    do {
+        std::cout << debug_info << "--------------------------" << std::endl;
+
+
+        continue_playing = play_game();
+
+        // display their hands
+        display_players();
+
+    } while (continue_playing);
 }
 
 //////////////////////////////
@@ -175,6 +196,19 @@ void Game::give_dealer_his_cards()
         give_dealer_card();
 }
 
+int Game::get_card_number()
+{
+	int card_number{0};
+
+	while (card_number < 1 || card_number > 13) // while it is not in the correct range, ask for input
+	{
+		std::cout << "give me a card number between 1-13" << std::endl;
+		std::cin >> card_number;
+	}
+
+	return card_number;
+}
+
 bool Game::play_game()
 {
     char response;
@@ -197,16 +231,26 @@ bool Game::play_game()
             switch (response)
             {
                 case 'Y':
-                    // give the player a card
-                    give_player_card(player);
-                    
-                    // if the player now has over 21, he busted so move to the next player
-                    if (player.current_sum() > 21)
-                    {
-                        display_player(player);
-                        std::cout << "Sorry " << player.name << ", you busted!" << std::endl;
-                        response = 'N';
-                    }
+					if (debug) {
+						// ask the player for the card they want and then give it to them
+						Card card = Card(get_card_number());
+						player.give_card(card);
+
+					} else {
+						// this is for playing the normal game
+
+						// give the player a card
+						give_player_card(player);
+						
+						// if the player now has over 21, he busted so move to the next player
+						if (player.current_sum() > 21)
+						{
+							display_player(player);
+							std::cout << "Sorry " << player.name << ", you busted!" << std::endl;
+							response = 'N';
+						}
+					} // end of else statement
+
                     break;
                 
                 case 'N':
@@ -217,11 +261,13 @@ bool Game::play_game()
     }
 
     // give the dealer his set of cards
-	give_dealer_his_cards();
+	if (!debug)
+		give_dealer_his_cards();
 
     std::cout << "\nFinal results below\n----------------------------" << std::endl;
     display_players();
-    display_dealer();
+	if (!debug)
+    	display_dealer();
     std::cout << "----------------------------" << std::endl;
 
 	response = get_response("\nDo you want to play again? [Y]/[N]");

@@ -53,6 +53,7 @@ HAVE FUN PLAYING!!\n";
     void display_dealer() const;
 	char get_response(std::string question);
 	void give_dealer_his_cards();
+	int get_card_number();
 
 };
 

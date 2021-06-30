@@ -23,7 +23,7 @@ struct Card
 
     CardType type;
 
-    Card(int n, CardType ct) : number{n}, type{ct} {}
+    Card(int n, CardType ct=CardType::Clover) : number{n}, type{ct} {}
 };
 
 #endif
